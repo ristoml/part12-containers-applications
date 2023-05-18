@@ -1,0 +1,6 @@
+apt update
+apt install nano
+nano /usr/src/app/index.js
+	console.log('Hello World')
+// ctrl+x, y, enter to save the modified file in Nano
+	
