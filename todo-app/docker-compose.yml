@@ -12,22 +12,22 @@ services:
       - 8080:80
     container_name: reverse-proxy
   todo-frontend:
-    image: todo-frontend
+    image: todo-frontend    
+    # volumes:
+    #   - ./todo-frontend/:/usr/src/app // removed for npm run build to work correctly inside the container
+    environment:
+      - REACT_APP_BACKEND_URL=/api
     build:
       context: ./todo-frontend/
-      dockerfile: Dockerfile
-    volumes:
-      - ./todo-frontend/:/usr/src/app
-    environment:
-      - REACT_APP_BACKEND_URL=api/
+      dockerfile: Dockerfile    
     container_name: todo-frontend
   todo-backend:
     image: todo-backend
+    # volumes:
+    #   - ./todo-backend:/usr/src/app
     build:
       context: ./todo-backend/
-      dockerfile: Dockerfile
-    volumes:
-      - ./todo-backend:/usr/src/app
+      dockerfile: Dockerfile    
     depends_on:
       - "mongo"
       - "redis"

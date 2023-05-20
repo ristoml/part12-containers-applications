@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.20.1
+    volumes: 
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - "blogs-frontend-dev"
+      - "blogs-backend-dev"
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+  blogs-frontend-dev:
+    image: blogs-frontend-dev
+    build:
+      context: ./frontend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./frontend/:/usr/src/app
+    container_name: blogs-frontend-dev
+  blogs-backend-dev:
+    image: blogs-backend-dev
+    build:
+      context: ./backend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - "mongo"
+    environment:      
+      - MONGODB_URI=mongodb://the_username:the_password@mongo:27017/blog_app
+      - TEST_MONGODB_URI=mongodb://the_username:the_password@mongo:27017/test_blog_app
+      - SECRET="piilotettu"
+      - PORT=3001      
+    container_name: blogs-backend-dev 
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: blog_app
+    volumes:       
+      - ./backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+    container_name: mongo
+volumes:
+  mongo_data: 

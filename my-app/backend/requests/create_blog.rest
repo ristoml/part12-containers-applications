@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InV1c2lrYXl0dGFqYTIiLCJpZCI6IjY0MzM0NTJjYTE3ZDhlMjIyZDM2N2M2MSIsImlhdCI6MTY4MTA4NTE4MX0.KjM5ZAzFRa02XJuNXQAOYTNWRJ03t5BhBJZ13-_-2Dw
+
+{    
+    "title": "toiimiko",
+    "author": "toimiihan",
+    "url": "toimii-ish",
+    "likes": 0
+}

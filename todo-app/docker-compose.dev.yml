@@ -17,11 +17,9 @@ services:
       context: ./todo-frontend/
       dockerfile: dev.Dockerfile
     volumes:
-      - ./todo-frontend/:/usr/src/app
-    # ports:
-    #   - 3000:3000
+      - ./todo-frontend/:/usr/src/app   
     environment:
-      - REACT_APP_BACKEND_URL=api/      
+      - REACT_APP_BACKEND_URL=/api
     container_name: todo-frontend-dev
   todo-backend-dev:
     image: todo-backend-dev
@@ -29,9 +27,7 @@ services:
       context: ./todo-backend/
       dockerfile: dev.Dockerfile
     volumes:
-      - ./todo-backend:/usr/src/app
-    # ports:
-    #   - 3001:3001
+      - ./todo-backend:/usr/src/app  
     depends_on:
       - "mongo"
       - "redis"

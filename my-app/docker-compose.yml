@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.20.1
+    volumes: 
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - "blogs-frontend"
+      - "blogs-backend"
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+  blogs-frontend:
+    image: blogs-frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile    
+    container_name: blogs-frontend
+  blogs-backend:
+    image: blogs-backend
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    depends_on:
+      - "mongo"      
+    environment:     
+       - MONGODB_URI=mongodb://the_username:the_password@mongo:27017/blog_app
+       - TEST_MONGODB_URI=mongodb://the_username:the_password@mongo:27017/test_blog_app
+       - SECRET="piilotettu"
+       - PORT=3001      
+    container_name: blogs-backend
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: blog_app
+    volumes:       
+      - ./backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+    container_name: mongo  
+volumes:
+  mongo_data: 

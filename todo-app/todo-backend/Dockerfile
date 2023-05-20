@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16.20.0
 ENV PORT=3001  
 WORKDIR /usr/src/app
 
